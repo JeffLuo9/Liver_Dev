@@ -1,3 +1,4 @@
+#Raw GEM files were segmented to the single‑cell gemCUT using CellPose segmentation results.
 python ../gem_cut.py -g ../Y00723K8.gem.gz -m ../Y00723K8_ep10.tif  -b 1 -o Y00723K8_gemCUT
 python ../gem_cut.py -g ../Y00723J6.gem.gz -m ../Y00723J6_ep10.tif  -b 1 -o Y00723J6_gemCUT
 python ../gem_cut.py -g ../Y00723E5.gem.gz -m ../Y00723E5_cellpose.tif  -b 1 -o Y00723E5_gemCUT
