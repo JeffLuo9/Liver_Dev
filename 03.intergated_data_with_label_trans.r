@@ -40,5 +40,5 @@ rna_all@meta.data[is.na(rna_all$label_unify),'label_unify'] <- winner_kNN(
                                        query_df = rna_all@reductions$harmony@cell.embeddings[is.na(rna_all$label_unify),1:15],
                                         sm_vector = rna_all@meta.data[!is.na(rna_all$label_unify),'label_unify'],
                                          knn = 5)
-
+saveRDS(rna_all,"../SC_hep_harmony_knn5.rds")
 
