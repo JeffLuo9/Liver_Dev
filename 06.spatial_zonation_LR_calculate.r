@@ -42,7 +42,18 @@ result_cv <- lr_df_s %>%
          Layer_4 < Layer_3 &
          Layer_5 < Layer_4)
 
-                                
+library(ArchR)
+library(RColorBrewer)
+
+colors<-ArchRPalettes$coolwarm
+cnn<-colorRampPalette(colors)(100)
+options(repr.plot.height = 10)
+library(pheatmap)
+pv_s<-t(scale(t(result_pv)))
+p<-pheatmap::pheatmap(pv_s,cluster_rows = F,cellwidth = 15,cellheight = 8,cluster_cols = F,border_color = NA,show_rownames = T,color = cnn)
+pdf("../pv_zonation_LR.heatmap.pdf",width = 5,height = 8)
+print(p)
+dev.off()
 
 
                                 
