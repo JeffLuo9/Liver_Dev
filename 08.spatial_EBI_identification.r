@@ -1,0 +1,15 @@
+library(ggplot2)
+library(Matrix)
+library(dplyr)
+library(data.table) 
+library(Seurat)
+library(ComplexHeatmap)
+library(pheatmap)
+library(RColorBrewer)
+library(dplyr)
+library(circlize)
+library(org.Mm.eg.db)
+library(clusterProfiler)
+setwd("/mnt/gandan/luojiahui/")
+
+
