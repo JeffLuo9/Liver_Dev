@@ -43,12 +43,10 @@ for (i in c(1:4)){
   rna@meta.data$EBI_niche[rna$Kup_cluster == "Kup" & rna$Ery_cluster == "Ery"]<-"niche"
   assign(paste0("rna_",i),rna)
 }
-saveRDS(rna_1,"../")
-
-rna_1<-readRDS("../Stereo_seq/new_stereo_filter_EK_niche/FP200002512_G2_rctd_sp.rds")  #P0
-rna_2<-readRDS("../Stereo_seq/new_stereo_filter_EK_niche/FP200002512_G5_rctd_sp.rds")   #p3
-rna_3<-readRDS("../Stereo_seq/new_stereo_filter_EK_niche/FP200000525TR_B2_rctd_sp.rds")   #p7
-rna_4<-readRDS("../Stereo_seq/new_stereo_filter_EK_niche/SS200000158BR_E5_rctd_sp.rds")   #p14
+saveRDS(rna_1,"../Stereo_seq/new_stereo_filter_EK_niche/FP200002512_G2_rctd_sp.rds")
+saveRDS(rna_2,"../Stereo_seq/new_stereo_filter_EK_niche/FP200002512_G5_rctd_sp.rds")
+saveRDS(rna_3,"../Stereo_seq/new_stereo_filter_EK_niche/FP200000525TR_B2_rctd_sp.rds")
+saveRDS(rna_4,"../Stereo_seq/new_stereo_filter_EK_niche/SS200000158BR_E5_rctd_sp.rds")
 
 df_EBI_genes<-read.csv("../EBI_DEGs.csv",row.names = 1)
 EBI_genes<-rownames(df_EBI_genes)[df_EBI_genes$significant == "yes" & df_EBI_genes$log2.fold_change. > 0]
@@ -84,7 +82,9 @@ p <- ggplot(meta_long, aes(x = time, y = exp, fill = E_c)) +
     legend.position = "none",
     panel.grid.major.y = element_line(color = "grey90", linetype = "dashed")
   )
-
+pdf("../EBI_score_bt_sp_time.pdf",width = 5,height = 4)
+p
+dev.off()
 
 
 
