@@ -43,6 +43,9 @@ for (i in c(1:4)){
   rna@meta.data$EBI_niche[rna$Kup_cluster == "Kup" & rna$Ery_cluster == "Ery"]<-"niche"
   assign(paste0("rna_",i),rna)
 }
+#K‑means clustering was applied to the cell‑type weight matrix computed by RCTD to segment the niches of erythroblasts and Kupffer cells.
+#Niches exhibiting both erythroblast and Kupffer‑cell signatures were defined as EBI niches.
+
 saveRDS(rna_1,"../Stereo_seq/new_stereo_filter_EK_niche/FP200002512_G2_rctd_sp.rds")
 saveRDS(rna_2,"../Stereo_seq/new_stereo_filter_EK_niche/FP200002512_G5_rctd_sp.rds")
 saveRDS(rna_3,"../Stereo_seq/new_stereo_filter_EK_niche/FP200000525TR_B2_rctd_sp.rds")
