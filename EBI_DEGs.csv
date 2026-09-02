@@ -1,4 +1,4 @@
-﻿gene,log2(fold_change),value_1,value_2,locus,sample_1,sample_2,status,test_stat,p_value,q_value,significant,fpkm5,fpkm10
+﻿gene,log2.fold_change.,value_1,value_2,locus,sample_1,sample_2,status,test_stat,p_value,q_value,significant,fpkm5,fpkm10
 Pklr,7.37233,0.06671,11.0531,chr3:89136141-89146594,mBM_F4_80_GFP_minus,mBM_F4_80_GFP_plus,OK,9.87855,5.00E-05,0.000250321,yes,1,1
 Ctsk,6.74406,0.338509,36.2857,chr3:95499209-95509387,mBM_F4_80_GFP_minus,mBM_F4_80_GFP_plus,OK,12.4622,5.00E-05,0.000250321,yes,1,1
 Rhd,6.63963,0.133128,13.2738,chr4:134864535-134896172,mBM_F4_80_GFP_minus,mBM_F4_80_GFP_plus,OK,9.19115,5.00E-05,0.000250321,yes,1,1
