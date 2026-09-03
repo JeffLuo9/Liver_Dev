@@ -36,7 +36,7 @@ $input_loom1 \
 --output ../data/work/pySCENIC/HSC_out_SCENICn.loom \
 --num_workers 16
 
-input_loom1=../data/work/pySCENIC/hep_50k.loom
+input_loom1=../data/work/pySCENIC/hep_80k.loom
 ls $tfs $feather $tbl $input_loom1
 
 # GRN
