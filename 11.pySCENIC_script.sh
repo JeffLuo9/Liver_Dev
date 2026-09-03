@@ -7,32 +7,89 @@ feather=../data/work/SCENIC/*.genes_vs_motifs.rankings.feather
 tbl=../data/work/SCENIC/motifs-v10nr_clust-nr.mgi-m0.001-o0.0.tbl
 #Downloaded from https://resources.aertslab.org/cistarget/motif2tf/.
 
-input_loom1=../data/work/pySCENIC_NPC0520/HSC.loom
-
+input_loom1=../data/work/pySCENIC/HSC.loom
 ls $tfs $feather $tbl $input_loom1
 
 # GRN
 pyscenic grn \
 --num_workers 16 \
---output /data/work/pySCENIC_NPC0520/HSC_adj.samplen.tsv \
+--output ../data/work/pySCENIC/HSC_adj.samplen.tsv \
 --method grnboost2 \
 $input_loom1 \
 $tfs
 
 # cisTarget
 pyscenic ctx \
-/data/work/pySCENIC_NPC0520/HSC_adj.samplen.tsv \
+../data/work/pySCENIC/HSC_adj.samplen.tsv \
 $feather \
 --annotations_fname $tbl \
 --expression_mtx_fname $input_loom1 \
 --mode dask_multiprocessing \
---output /data/work/pySCENIC_NPC0520/HSC_regn.csv \
+--output ../data/work/pySCENIC/HSC_regn.csv \
 --num_workers 16 \
 --mask_dropouts
 
 # AUCell
 pyscenic aucell \
 $input_loom1 \
-/data/work/pySCENIC_NPC0520/HSC_regn.csv \
---output /data/work/pySCENIC_NPC0520/HSC_out_SCENICn.loom \
+../data/work/pySCENIC/HSC_regn.csv \
+--output ../data/work/pySCENIC/HSC_out_SCENICn.loom \
+--num_workers 16
+
+input_loom1=../data/work/pySCENIC/hep_50k.loom
+ls $tfs $feather $tbl $input_loom1
+
+# GRN
+pyscenic grn \
+--num_workers 16 \
+--output ../data/work/pySCENIC/hep_adj.samplen.tsv \
+--method grnboost2 \
+$input_loom1 \
+$tfs
+
+# cisTarget
+pyscenic ctx \
+../data/work/pySCENIC/hep_adj.samplen.tsv \
+$feather \
+--annotations_fname $tbl \
+--expression_mtx_fname $input_loom1 \
+--mode dask_multiprocessing \
+--output ../data/work/pySCENIC/hep_regn.csv \
+--num_workers 16 \
+--mask_dropouts
+
+# AUCell
+pyscenic aucell \
+$input_loom1 \
+../data/work/pySCENIC/hep_regn.csv \
+--output ../data/work/pySCENIC/hep_out_SCENICn.loom \
+--num_workers 16
+
+input_loom1=../data/work/pySCENIC/LSECs.loom
+ls $tfs $feather $tbl $input_loom1
+
+# GRN
+pyscenic grn \
+--num_workers 16 \
+--output ../data/work/pySCENIC/LSEC_adj.samplen.tsv \
+--method grnboost2 \
+$input_loom1 \
+$tfs
+
+# cisTarget
+pyscenic ctx \
+../data/work/pySCENIC/LSEC_adj.samplen.tsv \
+$feather \
+--annotations_fname $tbl \
+--expression_mtx_fname $input_loom1 \
+--mode dask_multiprocessing \
+--output ../data/work/pySCENIC/LSEC_regn.csv \
+--num_workers 16 \
+--mask_dropouts
+
+# AUCell
+pyscenic aucell \
+$input_loom1 \
+../data/work/pySCENIC/LSEC_regn.csv \
+--output ../data/work/pySCENIC/LSEC_out_SCENICn.loom \
 --num_workers 16
