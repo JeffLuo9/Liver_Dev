@@ -9,7 +9,7 @@ import scanpy as sc
 x=sc.read_csv("../data/work/Hep_for.scenic.data.csv");
 row_attrs = {"Gene": np.array(x.var_names),};
 col_attrs = {"CellID": np.array(x.obs_names)};
-lp.create("../data/work/pySCENIC/hep_50k.loom",x.X.transpose(),row_attrs,col_attrs);
+lp.create("../data/work/pySCENIC/hep_80k.loom",x.X.transpose(),row_attrs,col_attrs);
 
 x=sc.read_csv("../data/work/EC_for.scenic.data.csv");
 row_attrs = {"Gene": np.array(x.var_names),};
