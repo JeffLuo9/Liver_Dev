@@ -108,10 +108,49 @@ pdf("../celltype_marker_featureplot.pdf",width = 21,height = 90)
 do.call(cowplot::plot_grid, c(list(ncol = 3),p2))
 dev.off()
 
-<-c("P10NPC_2_1","P10NPC_2_2","P10NPC_3_1","P10NPC_3_2","P21NPC_2_1","P21NPC_2_2","P28HEP_2_1","P28HEP_2_2","P21HEP_1_2L","P21HEP_1_3L",
+p <- plotGroups(
+    ArchRProj = projI_L, 
+    groupBy = "HarmonyClusters", 
+    colorBy = "cellColData", 
+  name = c("TSSEnrichment","nFrags","DoubletScore"),
+  plotAs = "violin",
+  alpha = 0.4,
+    baseSize = 10,
+  addBoxPlot = TRUE,
+)
+
+p2 <- lapply(p, function(x){
+    x + guides(color = FALSE, fill = FALSE) + 
+    theme_ArchR(baseSize = 6.5) +
+    theme(plot.margin = unit(c(0, 0, 0, 0), "cm")) +
+    theme(
+        axis.text.x=element_blank(), 
+        axis.ticks.x=element_blank(), 
+        axis.text.y=element_blank(), 
+        axis.ticks.y=element_blank()
+    )
+})
+pdf("../HarmonyClusters_Vlnplot_QC.pdf",width = 18,height = 80)
+do.call(cowplot::plot_grid, c(list(ncol = 3),p2))
+dev.off()
+
+f_sample<-c("P10NPC_2_1","P10NPC_2_2","P10NPC_3_1","P10NPC_3_2","P21NPC_2_1","P21NPC_2_2","P28HEP_2_1","P28HEP_2_2","P21HEP_1_2L","P21HEP_1_3L",
                                                     "P21HEP_1_1L","P35Hep1-2","P21NPC_2_3")
+f_clusters<-c("C3","C43","C26","C35","C24","C46")
 
-rownames(proj@cellColData)[which(! proj@cellColData$HarmonyClustersn %in% c("C3","C43","C26","C35","C24","C46"))]
+projI_L<-projI_L[! projI_L@cellColData$Sample %in% f_sample]
+projI_L<-projI_L[! projI_L@cellColData$HarmonyClusters %in% f_clusters]
 
+projI_L@cellColData$anno1=as.vector(mapvalues(proJI_L@cellColData$HarmonyClusters,from = paste0("C",c(1:43)),to=c("Hep","Hep" , "Hep","Hep","Hep",
+                                                                                                                              "Hep","Hep","Hep","Hep",
+                                                                                         "Ery","Ery","Hep","Hep","Hep","Hep","Ery","Hep",
+                                                                                         "Hep","Hep","Endo","Endo","DC","Monocle","Kupffer",
+                                                                                            "DC","Kupffer","Kupffer","Stellate","Cholangiocyte",
+                                                                                            "Cholangiocyte","Monocle","Monocle","DC","DC",
+                                                                                            "Ery","Nk_T","B_cell","B_cell","Nk_T","Nk_T","Nk_T",
+                                                                                            "B_cell","Nk_T")))
+
+proj_hep<-subsetArchRProject(projI_L,cells =rownames(projI_L@cellColData)[which(projI_L$anno1 %in% c("Hep"))],outputDirectory = "ATAC_hep_0226",force = T)
+proj_npc<-subsetArchRProject(projI_L,cells =rownames(projI_L@cellColData)[which(! projI_L$anno1 %in% c("Hep"))],outputDirectory = "ATAC_npc_0226",force = T)
 
 
