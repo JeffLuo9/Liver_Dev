@@ -40,6 +40,12 @@ sample_name1<-gsub("_dtb\\.csv","",sample_name1)
 
 for (i in c(1:length(dtb_file))){
     df<-get(paste0("df_",i))
+    lower_thresh <- quantile(df$area, probs = 0.001, na.rm = TRUE)
+    area_mean <- mean(df$area, na.rm = TRUE)
+    area_sd <- sd(df$area, na.rm = TRUE)
+    upper_thresh <- area_mean + 3 * area_sd
+    df <- df[!is.na(df$area) & df$area >= lower_thresh & df$area <= upper_thresh, ]
+    
     dfs<-addPloidy(df,152)
     dfs<-dfs[! is.na(dfs$ploidy),]
     dfs$ploidy_save = dfs$ploidy
