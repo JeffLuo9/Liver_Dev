@@ -129,5 +129,36 @@ proj1 <- addCoAccessibility(
     reducedDims = "IterativeLSI"
 )
 
-
+groupList <- SimpleList(
+    Hep1 = SimpleList(
+        ATAC = proj1$cellNames[proj1$anno_hep == "Hep1"],
+        RNA = rownames(rna@meta.data)[rna$anno_hep == "Hep1"]
+    ),
+   Hep2 = SimpleList(
+        ATAC = proj1$cellNames[proj1$anno_hep == "Hep2"],
+        RNA = rownames(rna@meta.data)[rna$anno_hep == "Hep2"]
+    ),
+    Hep3 = SimpleList(
+        ATAC = proj1$cellNames[proj1$anno_hep == "Hep3"],
+        RNA = rownames(rna@meta.data)[rna$anno_hep == "Hep3"]
+    ),
+    Hep4 = SimpleList(
+        ATAC = proj1$cellNames[proj1$anno_hep == "Hep4"],
+        RNA = rownames(rna@meta.data)[rna$anno_hep == "Hep4"]
+    ),
+)
+proj1 <- addGeneIntegrationMatrix(
+    ArchRProj = proj1, 
+    useMatrix = "GeneScoreMatrix",
+    matrixName = "GeneIntegrationMatrix",
+    reducedDims = "IterativeLSI",
+    seRNA = rna,
+    addToArrow = TRUE,
+    force= TRUE,
+    groupList = groupList,
+    groupRNA = "BioClassification",
+    nameCell = "predictedCell",
+    nameGroup = "predictedGroup",
+    nameScore = "predictedScore"
+)
 
