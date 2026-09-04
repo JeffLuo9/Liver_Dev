@@ -1,1 +1,29 @@
+library(ggplot2)
+library(Matrix)
+library(dplyr)
+library(data.table) 
+library(Seurat)
+library(RColorBrewer)
+library(dplyr)
 
+rna_npc<-readRDS("../rna_npc.rds")
+rna_kup<-subset(rna_npc,subset = annotation == "Kupffer")
+rna_kup<-subset(rna_kup,subset = time %in% c("P0","P3","P7","P10"))
+
+df_EBI_genes<-read.csv("../EBI_DEGs.csv",row.names = 1)
+EBI_genes<-rownames(df_EBI_genes)[df_EBI_genes$significant == "yes" & df_EBI_genes$log2.fold_change. > 0]
+
+rna_kup<-NormalizeData(rna_kup)
+rna_kup<-AddModuleScore(rna_kup,features = list(EBI_genes),name = "EBI_s")
+rna_kup$EBI_cluster<-kmeans(rna_kup$EBI_s1,centers = 2)$cluster
+
+k_EBI<-function(rna){
+    num_kup1<-mean(rna$EBI_s1[rna$EBI_cluster  == 1])
+    num_kup2<-mean(rna$EBI_s1[rna$EBI_cluster  == 2])
+    rna$EBI_pos<-rna$EBI_cluster
+    ifelse(num_kup1 > num_kup2,rna$EBI_pos[rna$EBI_pos == 1]<-"EBI_kupffer",rna$EBI_pos[rna$EBI_pos == 2]<-"EBI_kupffer")
+    return(rna)
+}
+rna_kup<-k_EBI(rna_kup)
+rna_EBI_k<-subset(rna_kup,subset = EBI_pos == "EBI_kupffer")
+saveRDS(rna_EBI_k,"../scRNA_EBI_kupffer.rds")
