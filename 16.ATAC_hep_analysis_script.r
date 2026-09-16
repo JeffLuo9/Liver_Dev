@@ -161,4 +161,57 @@ proj1 <- addGeneIntegrationMatrix(
     nameGroup = "predictedGroup",
     nameScore = "predictedScore"
 )
+seGroupMotif <- getGroupSE(ArchRProj = proj1, useMatrix = "MotifMatrix", groupBy = "anno_hep")
+seZ <- seGroupMotif[rowData(seGroupMotif)$seqnames=="z",]
+rowData(seZ)$maxDelta <- lapply(seq_len(ncol(seZ)), function(x){
+  rowMaxs(assay(seZ) - assay(seZ)[,x])
+}) %>% Reduce("cbind", .) %>% rowMaxs
 
+
+corGIM_MM <- correlateMatrices(
+    ArchRProj = proj1,
+    useMatrix1 = "GeneIntegrationMatrix",
+    useMatrix2 = "MotifMatrix",
+    reducedDims = "IterativeLSI"
+)
+
+
+corGIM_MM$maxDelta <- rowData(seZ)[match(corGIM_MM$MotifMatrix_name, rowData(seZ)$name), "maxDelta"]
+
+
+corGIM_MM <- corGIM_MM[order(abs(corGIM_MM$cor), decreasing = TRUE), ]
+corGIM_MM <- corGIM_MM[which(!duplicated(gsub("\\-.*","",corGIM_MM[,"MotifMatrix_name"]))), ]
+corGIM_MM$TFRegulator <- "NO"
+corGIM_MM$TFRegulator[which(corGIM_MM$cor > 0.5 & corGIM_MM$padj < 0.01 & corGIM_MM$maxDelta > quantile(corGIM_MM$maxDelta, 0.75))] <- "YES"
+sort(corGIM_MM[corGIM_MM$TFRegulator=="YES",1])
+
+p <- ggplot(data.frame(corGIM_MM), aes(cor, maxDelta, color = TFRegulator)) +
+  geom_point() + 
+  theme_ArchR() +
+  geom_vline(xintercept = 0, lty = "dashed") + 
+  scale_color_manual(values = c("NO"="darkgrey", "YES"="firebrick3")) +
+  xlab("Correlation To Gene Expression") +
+  ylab("Max TF Motif Delta") +
+  scale_y_continuous(
+    expand = c(0,0), 
+    limits = c(0, max(corGIM_MM$maxDelta)*1.05)
+  )+ggrepel::geom_label_repel(
+        data = as.data.frame(corGSM_MM[corGIM_MM$TFRegulator == "YES",]), aes(x = cor, y = maxDelta, label = MotifMatrix_name), 
+        size = 1.5,
+        nudge_x = 0.2,
+        max.overlaps = 25, 
+        color = "black"
+  )
+pdf("../data/work/HEP/hep_GIM_MM_order_plot.pdf",width = 7.5,height = 6)
+p
+dev.off()
+
+pwm <- getPeakAnnotation(proj1, "Motif")$motifs[["Nfia_862"]]
+ppm <- PWMatrixToProbMatrix(pwm)
+ppm
+colSums(ppm) %>% range
+p<-ggseqlogo(ppm, method = "bits")
+
+pdf("../data/work/HEP/Nfia_Motif_seqlogo_plot.pdf",width = 7.5,height = 5)
+p
+dev.off()
