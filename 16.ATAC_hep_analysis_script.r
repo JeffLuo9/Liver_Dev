@@ -3,6 +3,7 @@ library(patchwork)
 addArchRThreads(threads = 8)
 addArchRGenome("mm10")
 library(data.table)
+library(ggseqlogo)
 
 proj1<-loadArchRProject("../ATAC_hep_0226")
 
